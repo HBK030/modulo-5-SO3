@@ -1,0 +1,45 @@
+sudo yum install openssh-server -y
+ssh-keygen -t rsa
+ssh-copy-id 2024-1913@192.168.175.130
+ssh-copy-id fulanazo@192.168.175.129
+sudo yum install rsync -y
+
+sudo mkdir practica5
+cd practica5
+sudo touch edan{1..100}
+rsync -avz /home/fulanazo/practica5 2024-1913@192.168.175.130:/home/2024-1913
+
+
+sudo nano edan90
+
+-------DENTRO-----
+
+SINCRONIZACION EXITOSA
+
+----GUARDAR----
+
+cat edan90
+cd
+cd /
+sudo nano sincronizacion.sh
+
+
+----dentro-----
+
+#!/bin/bash
+rsync -avz /home/fulanazo/practica5 2024-1913@192.168.175.130:/home/2024-1913
+cat sincronizacion.sh
+sudo chmod +x sincronizacion.sh
+sudo chown fulanazo:fulanazo sincronizacion.sh
+crontab -e
+
+----adentro----
+
+* * * * * /sincronizacion.sh
+
+------------
+
+crontab -l
+cd
+cd practica5
+cat edan90.txt

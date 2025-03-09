@@ -1,0 +1,29 @@
+dnf --enablerepo=highavailability install pacemaker -y
+dnf --enablerepo=highavailability install fence-agents-ipmilan -y
+dnf --enablerepo=highavailability install pcs -y
+
+systemctl enable pcsd --now
+sudo systemctl start pcsd
+1- firewall-cmd --permanent --add-service=high-availability
+2- firewall-cmd --reload
+passwd hacluster 
+123
+
+pcs host auth 10.0.0.104 10.0.0.30 -u hacluster -p 123
+pcs cluster setup micluster 10.0.0.104 10.0.0.30 
+
+pcs status 
+pcs cluster start -all 
+pcs cluster enable --all 
+systemctl start pacemaker
+pcs status 
+
+
+sudo pcs resource create Flotanip ocf:heartbeat:IPaddr2 ip=10.0.0.150 cidr_netmask=24 op monitor interval=30s
+pcs status 
+sudo pcs stonith create suicidio fence_ipmilan ipaddr=10.0.0.150 login=admin passwd=secret
+sudo pcs property set stonith-enabled=true
+pcs status
+
+
+
